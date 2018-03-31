@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Navbar from './Views/Navbar.js';
+import ArtDisplay from './Views/ArtDisplay.js';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import './App.css';
@@ -8,14 +9,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+      <MuiThemeProvider>
         <header>
-          <MuiThemeProvider>
           <div> <Navbar/> </div>
-          </MuiThemeProvider>
         </header>
-        <p className="App-intro">
+        <h1>
           Welcome to YUAG 
-        </p>
+        </h1>
+        <ArtDisplay/>
+      </MuiThemeProvider>
       </div>
     );
   }
