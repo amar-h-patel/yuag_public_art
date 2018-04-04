@@ -1,14 +1,20 @@
-var express = require('express');
+let express = require('express');
+let app = express();
 const Sequelize = require('sequelize');
 const PORT = process.env.PORT || 3000;
-const DB_PASSWORD = String(process.env.PASSWORD);
+const DB_PASSWORD = String(process.env.PASS) || "";
 const HOST = process.env.HOST || 'ec2-52-55-107-25.compute-1.amazonaws.com';
-var app = express();
 
-console.log('local port: %s\ndb location: %s\ndb password: %s', PORT, HOST, DB_PASSWORD)
+console.log('local port: %s\ndb location: %s\ndb password: %s',
+    PORT, HOST, DB_PASSWORD);
 
-// set up time: make an object with all the data Sequelize needs to connect
-const database = new Sequelize({
+if (DB_PASSWORD == ""){
+    console.log('no password specified - terminating');
+    process.exit(1)
+}
+
+// set up time: make a Database class
+let database = new Sequelize({
     database: 'publicart',
     username: 'postgres',
     password: DB_PASSWORD,
@@ -17,26 +23,35 @@ const database = new Sequelize({
     operatorsAliases: false,
 });
 
-// now it's time to actually attempt to connect to the db
-database
-    .authenticate()
-    .then(() => {
-        console.log('we did it, connection worky!');
-    })
-    .catch(err => {
-            console.log('connection failed :(', err)
-        }
-    );
+function open_db() {
+    // now it's time to actually attempt to connect to the db
+    database
+        .authenticate()
+        .then(() => {
+            console.log('we did it, connection worky!');
+        })
+        .catch(err => {
+                console.log('connection failed :(', err)
+            }
+        );
+}
 
-database
-    .query(
-        `SELECT COLUMN_NAME 
+// test fn - describe the art_details table
+function db_test() {
+    database
+        .query(
+            `SELECT COLUMN_NAME 
         FROM information_schema.COLUMNS 
         WHERE TABLE_NAME = 'art_details'`
-    )
-    .spread((results, metadata) => {
-        console.log(results)
-    })
+        )
+        .spread((results, metadata) => {
+            console.log(results);
+            console.log('sample query successful')
+        });
+}
+
+open_db();
+db_test();
 
 app.use(express.static(__dirname + './../../')); //serves the index.html
 app.listen(PORT); //listens on localhost on specified port (default 3000)
