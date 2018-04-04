@@ -28,7 +28,7 @@ class Head extends Component {
   render() {
     return (
       <div >
-        This is going to be a message: {this.state.message}
+        This is going to be a message: {this.state.string}
       </div>
     );
   }
