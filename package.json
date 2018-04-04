@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "npm run build --prefix ./client && node ./bin/www"
+    "start": "npm run build --prefix ./client && node ./bin/www",
+    "postinstall": "npm install --prefix ./client"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
