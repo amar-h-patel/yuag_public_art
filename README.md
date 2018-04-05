@@ -2,8 +2,10 @@
 
 ## Deployment
 
+
 Ensure client is built
-npm run build
+    npm install
+    npm run build
 
 Deploy with
-npm start
+    npm start
