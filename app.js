@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 
 
-app.get('/', indexRouter);
+
 
 app.get('/users', function(req, res, next){
 	let data = {
