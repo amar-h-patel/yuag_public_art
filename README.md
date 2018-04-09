@@ -4,8 +4,11 @@
 
 
 Ensure client is built
+
     npm install
-    npm run build
 
 Deploy with
-    npm start
+
+    PASS=databasepassword npm start
+
+(replacing "databasepassword" with, you know, your database password. The program will be *very* grumpy if you don't supply the PASS field.)
