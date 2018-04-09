@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-
+import Jumbo from "./Views/Jumbo.js";
+import Gallery from "./Views/Gallery.js";
 import Headnav from "./Views/Headnav.js";
 
 import './App.css';
@@ -12,6 +13,9 @@ class App extends Component {
         <header>
           
           <div> <Headnav/> </div>
+          <div> <Jumbo/> </div>
+          <div> <Gallery/> </div>
+
 
         </header>
         <p className="App-intro">
