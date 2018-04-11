@@ -8,6 +8,8 @@ Ensure client is built
 
 
 Deploy with
+    
+
     PASS=databasepassword npm start
 
-    where databasepassword is the db password
+where databasepassword is the db password
