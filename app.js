@@ -81,6 +81,8 @@ app.get('/users', function(req, res, next){
 	res.status(200).send(data);
 });
 
+
+
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('*', (req, res) => {
