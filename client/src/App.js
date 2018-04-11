@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
-import Navbar from './Views/Navbar.js';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Head from "./Views/Head.js";
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import Headnav from "./Views/Headnav.js";
+import Viewer from "./Views/Viewer.js";
+import Maps from "./Views/Maps.js";
+import Submit from "./Views/Submit.js";
+import About from "./Views/About.js";
 
 import './App.css';
 
 class App extends Component {
   render() {
     return (
+      <Router>
       <div className="App">
         <header>
-          <MuiThemeProvider>
-          <div> <Navbar/> </div>
-          </MuiThemeProvider>
+          
+          <div> <Headnav/> </div>
+
         </header>
-        <p className="App-intro">
-          Welcome to YUAG Public Art
-          <Head/> 
-        </p>
+         <Route path="/maps" component={Maps}/>
+         <Route path="/submit" component={Submit}/>
+         <Route path="/about" component={About}/>
+         <Route exact path="/" component={Viewer}/>
+       
       </div>
+      </Router>
     );
   }
 }
