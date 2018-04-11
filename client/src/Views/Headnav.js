@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
 import '../../node_modules/bootstrap3/dist/css/bootstrap.css';
 
 //import {styleMaps} from 'react-bootstrap';
@@ -27,15 +26,17 @@ class Headnav extends Component {
       return (
         <Navbar style={styles} inverse collapseOnSelect>
           <Navbar.Header>
-            <Navbar.Brand >
+            <Navbar.Brand>
 
               <img style={imgStyle} src="https://artgallery.yale.edu/sites/all/themes/artgallery/logo.png" alt="YUAG"/>
-
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header> 
           <Navbar.Collapse>
             <Nav style={textStyle} pullRight>
+              <NavItem eventKey={1} href="/">
+                Home
+              </NavItem>
               <NavItem eventKey={1} href="/about">
                 About
               </NavItem>
