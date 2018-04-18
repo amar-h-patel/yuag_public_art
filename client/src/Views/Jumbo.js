@@ -6,15 +6,15 @@ import './Jumbo.css';
 
 class Jumbo extends Component {
   render() {
-
+    var h1style = {
+      color: 'white',
+    }
     return (
       <div className="Jumbo">
-        <Jumbotron>
+        <Jumbotron styles={h1style}>
             <h1>Public Art at Yale</h1>
             <br/>
-            <p>
-            A crowd-sourced archive of art in public spaces.
-            </p>
+
             <br/>
             <br/>
 
