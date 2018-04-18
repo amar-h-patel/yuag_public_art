@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Panel, Tabs, Grid, Row, Col, Tab } from 'react-bootstrap';
 
-import './About.css';
-
 class About extends Component{
 	render(){
 		return (
