@@ -40,8 +40,8 @@ class Headnav extends Component {
               <NavItem eventKey={1} href="/about">
                 About
               </NavItem>
-              <NavItem eventKey={2} href="/maps">
-                Map
+              <NavItem eventKey={2} href="/browse">
+                Browse
               </NavItem>
               <NavItem eventKey={2} href="/submit">
                 Submit
