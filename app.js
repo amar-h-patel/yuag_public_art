@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var multer  = require('multer')
+var upload = multer();
 const Sequelize = require('sequelize');
 const DB_PASSWORD = String(process.env.PASS) || "";
 const PORT = process.env.PORT || 3000;
@@ -42,8 +44,8 @@ function open_db() {
 function db_test() {
     database
         .query(
-            `SELECT COLUMN_NAME 
-        FROM information_schema.COLUMNS 
+            `SELECT COLUMN_NAME
+        FROM information_schema.COLUMNS
         WHERE TABLE_NAME = 'art_details'`
         )
         .spread((results, metadata) => {
@@ -89,10 +91,16 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
+app.post('/submit', upload.array(), function (req, res, next) {
+  console.log(req.body);
+
+  res.send('yes');
+})
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
 
 // error handler
 app.use(function(err, req, res, next) {

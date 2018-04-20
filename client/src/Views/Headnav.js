@@ -12,7 +12,7 @@ class Headnav extends Component {
     render() {
       var styles={
         "height": 105,
-        "border-radius": 0,
+        "borderRadius": 0,
         "color": "#9B7C39",
         "margin": 0
       };
@@ -21,7 +21,7 @@ class Headnav extends Component {
       };
       var textStyle={ // not sure how to change the color of the text
         "color": "white",// no
-        "padding-top": 53,
+        "paddingTop": 53,
       };
       return (
         <Navbar style={styles} inverse collapseOnSelect>
@@ -31,7 +31,7 @@ class Headnav extends Component {
               <img style={imgStyle} src="https://artgallery.yale.edu/sites/all/themes/artgallery/logo.png" alt="YUAG"/>
             </Navbar.Brand>
             <Navbar.Toggle />
-          </Navbar.Header> 
+          </Navbar.Header>
           <Navbar.Collapse>
             <Nav style={textStyle} pullRight>
               <NavItem eventKey={1} href="/">
@@ -54,5 +54,3 @@ class Headnav extends Component {
     }
 
 export default Headnav;
-
-
