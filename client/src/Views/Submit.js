@@ -67,6 +67,7 @@ class Submit extends Component{
     });
     const data = new FormData();
     data.append('file', this.uploadInput.files[0]);
+    data.append('filename', this.state.id);
     fetch('/upload', {
       method: 'POST',
 
