@@ -3,8 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var multer  = require('multer')
-var upload = multer();
+var multer = require('multer');
+var upload = multer()
+const fileUpload = require('express-fileupload');
 const Sequelize = require('sequelize');
 const DB_PASSWORD = String(process.env.PASS) || "";
 const PORT = process.env.PORT || 3000;
@@ -71,6 +72,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(fileUpload());
+app.use('/public', express.static(__dirname + '/public'));
 
 
 
@@ -96,6 +99,19 @@ app.post('/submit', upload.array(), function (req, res, next) {
 
   res.send('yes');
 })
+
+app.post('/upload', (req, res, next) => {
+
+  let imageFile = req.files.file;
+
+  imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function(err) {
+    if (err) {
+      return res.status(500).send(err);
+    }
+
+    res.send("yes");
+  });
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

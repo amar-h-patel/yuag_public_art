@@ -65,6 +65,13 @@ class Submit extends Component{
 
 
     });
+    const data = new FormData();
+    data.append('file', this.uploadInput.files[0]);
+    fetch('/upload', {
+      method: 'POST',
+
+      body: data,
+    });
    console.log(submission);
    e.preventDefault();
    fetch('/submit', {
@@ -76,6 +83,25 @@ class Submit extends Component{
    body: submission,
  });
  this.setState({message: "Successfully Submitted!"});
+ this.setState({
+   id: '',
+   subject: '',
+   date: '',
+   medium: '',
+   dimensions: '',
+   location: '',
+   owner: '',
+   source: '',
+   value: '',
+   restrictions: '',
+   conditon: '',
+   notes: '',
+   surveyor: '',
+   dateSurveyed: ''
+
+ });
+ window.scrollTo(0,0);
+
 }
 handleChange(event) {
   const target = event.target;
@@ -111,32 +137,32 @@ handleSelector(event){
              <h1> Submit A Work of Public Art </h1>
              {status}
              <form onSubmit={this.handleSubmit} style={form}>
-               <label for="id">Identification Number </label>
+               <label >Identification Number </label>
                <input onChange={this.handleChange} value={this.state.id} type="text" id="id" name="id" placeholder="Enter ID#..."/>
 
-               <label for="subject">Subject/Title</label>
+               <label >Subject/Title</label>
                <input onChange={this.handleChange} value={this.state.subject}type="text" id="subject" name="subject" placeholder="Enter Subject/Title..."/>
 
-               <label for="date">Date of Creation</label>
+               <label >Date of Creation</label>
                <input onChange={this.handleChange} value={this.state.date}type="text" id="date" name="date" placeholder="Enter Year..."/>
 
 
-               <label for="medium">Medium</label>
+               <label >Medium</label>
                <input onChange={this.handleChange} value={this.state.medium}type="text" id="medium" name="medium" placeholder="Enter Medium..."/>
 
-               <label for="image">Image of Art</label>
-               <input id="image" name="image" type="file"/>
+               <label >Image of Art</label>
+               <input ref={(ref) => { this.uploadInput = ref; }} id="image" name="image" type="file"/>
 
-               <label for="dimensions">Dimensions</label>
+               <label >Dimensions</label>
                <input onChange={this.handleChange} value={this.state.dimensions} type="text" id="dimensions" name="dimensions" placeholder="Enter Dimensions..."/>
 
-               <label for="location">Location</label>
+               <label >Location</label>
                <input onChange={this.handleChange} value={this.state.location}type="text" id="location" name="location" placeholder="Enter Location..."/>
 
-               <label for="owner">Owner</label>
+               <label >Owner</label>
                <input onChange={this.handleChange} value={this.state.owner}type="text" id="owner" name="owner" placeholder="Enter Owner..."/>
 
-               <label for="source">Source</label>
+               <label >Source</label>
                <select id="source" name="source"
                  value={this.state.source}
                  onChange={this.handleSelector}
@@ -147,15 +173,15 @@ handleSelector(event){
                </select>
 
 
-               <label for="value">Value</label>
+               <label >Value</label>
                <input onChange={this.handleChange} value={this.state.value}type="text" id="value" name="value" placeholder="Enter Value..."/>
 
 
-               <label for="restrictions">Restrictions</label>
+               <label >Restrictions</label>
                <input onChange={this.handleChange} value={this.state.restrictions}type="text" id="restrictions" name="restrictions" placeholder="Enter Restrictions..."/>
 
 
-               <label for="condtion">Condition</label>
+               <label >Condition</label>
                <select id="conditon" name="condition"
                  value={this.state.condition}
                  onChange={this.handleSelector}>
@@ -168,13 +194,13 @@ handleSelector(event){
 
                </select>
 
-               <label for="notes">Notes</label>
+               <label >Notes</label>
                <input onChange={this.handleChange} value={this.state.notes} type="text" id="notes" name="notes" placeholder="Enter Notes..."/>
 
-               <label for="surveyor">Surveyor</label>
+               <label >Surveyor</label>
                <input onChange={this.handleChange} value={this.state.surveyor}type="text" id="surveyor" name="surveyor" placeholder="Enter Surveyor..."/>
 
-               <label for="dateSurveyed">Date Surveyed</label>
+               <label >Date Surveyed</label>
                <input onChange={this.handleChange} value={this.state.dateSurveyed}type="text" id="dateSurveyed" name="dateSurveyed" placeholder="Enter Date Surveyed..."/>
 
                <input type="submit" value="Submit"/>
