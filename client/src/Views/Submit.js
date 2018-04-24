@@ -45,7 +45,7 @@ class Submit extends Component {
         this.handleSelector = this.handleSelector.bind(this);
     }
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         let submission = JSON.stringify({
             id: this.state.id,
             subject: this.state.subject,
@@ -69,9 +69,9 @@ class Submit extends Component {
             method: 'POST',
             body: data,
         });
-        console.log(submission);
         e.preventDefault();
-        fetch('/submit', {
+
+        let response = await fetch('/submit', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -79,24 +79,31 @@ class Submit extends Component {
             },
             body: submission,
         });
-        this.setState({message: "Successfully Submitted!"});
-        this.setState({
-            id: '',
-            subject: '',
-            date: '',
-            medium: '',
-            dimensions: '',
-            location: '',
-            owner: '',
-            source: '',
-            value: '',
-            restrictions: '',
-            condition: '',
-            notes: '',
-            surveyor: '',
-            dateSurveyed: ''
-
-        });
+        if (response.status === 200) {
+            this.setState({message: "Successfully Submitted!"});
+            this.setState({
+                id: '',
+                subject: '',
+                date: '',
+                medium: '',
+                dimensions: '',
+                location: '',
+                owner: '',
+                source: '',
+                value: '',
+                restrictions: '',
+                condition: '',
+                notes: '',
+                surveyor: '',
+                dateSurveyed: ''
+            });
+        } else if (response.status === 400) {
+            this.setState({message: "Invalid submission :("});
+        } else if (response.status === 500) {
+            this.setState({message: "Server error - try again in a minute"})
+        } else {
+            this.setState({message: "Unknown error."})
+        }
         window.scrollTo(0, 0);
 
     }
@@ -119,8 +126,8 @@ class Submit extends Component {
         let status = <div></div>;
         if (this.state.message) {
             status = (<div style={{"padding": "5%"}}>
-                <Alert bsStyle="success" style={{"width": "50%", "display": "inline-block", "margin": "auto"}}>
-                    <strong> Successfully Submitted! </strong>
+                <Alert bsStyle="info" style={{"width": "50%", "display": "inline-block", "margin": "auto"}}>
+                    <strong> {this.state.message} </strong>
                 </Alert></div>);
         }
 
@@ -169,7 +176,6 @@ class Submit extends Component {
                                 onChange={this.handleSelector}>
                             <option value="gift">Gift</option>
                             <option value="purchase">Purchase</option>
-
                         </select>
 
                         <label>Value</label>

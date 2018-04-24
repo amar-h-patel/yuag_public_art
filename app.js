@@ -10,7 +10,6 @@ const pg = require('pg');
 
 
 // begin database logic
-
 const pool = new pg.Pool({
     user: 'postgres',
     host: process.env.HOST || 'ec2-52-55-107-25.compute-1.amazonaws.com',
@@ -19,7 +18,6 @@ const pool = new pg.Pool({
     port: 5432,
     max: 10  // max number of clients in the connection pool
 });
-
 
 // test fn - describe the art_details table
 async function db_test() {
@@ -35,7 +33,8 @@ async function db_test() {
     }
 }
 
-async function delete_art_table() {  // ONLY FOR DEBUGGING (of course) - deletes the art detail table.
+// ONLY FOR DEBUGGING (of course) - deletes the art detail table.
+async function delete_art_table() {
     try {
         await pool.query(`DROP TABLE IF EXISTS public.art_details`);
         console.log('drop table if exists art_details OK')
@@ -43,7 +42,6 @@ async function delete_art_table() {  // ONLY FOR DEBUGGING (of course) - deletes
         console.log('err in drop table ' + err)
     }
 }
-
 
 async function init_tables() {
     // creates the tables if it doesn't already exist.
@@ -103,7 +101,7 @@ async function add_art_to_db(artObject) {
             restrictions, work_condition, yuag_id, note)
             VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
             $14, $15, $16, $17, $18, $19, $20)`;
-    const values = [artObject.subject, artObject.surveyor, artObject.lat, artObject.long, 
+    const values = [artObject.subject, artObject.surveyor, artObject.lat, artObject.long,
         artObject.medium, artObject.artType, artObject.workColors, artObject.creationYear,
         artObject.imageLinks, artObject.artist, artObject.dimns, artObject.isIndoors,
         artObject.isMovable, artObject.owner, artObject.source, artObject.value,
@@ -149,15 +147,13 @@ async function test() {  // a function to test basic db functionality
         'a rich person', 100000, 'none known', 'very good', 'it\'s a purple dinosaur', false);
 
     await db_test();
-    await rebuild();
+    // await rebuild();  // For debugging: deletes and rebuilds the db.
     await add_art_to_db(testWork);
 }
 
 test();
 
-
 // end database logic
-
 
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
@@ -175,7 +171,6 @@ app.use(cookieParser());
 app.use(fileUpload());
 app.use('/public', express.static(__dirname + '/public'));
 
-
 app.get('/users', function (req, res, next) {
     let data = {
         message: "Hello World!"
@@ -183,36 +178,33 @@ app.get('/users', function (req, res, next) {
     res.status(200).send(data);
 });
 
-
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
-app.post('/submit', upload.array(), function (req, res, next) {
-    console.log('incoming submission: ' + req.body.id);
-    console.log(req.body);
-    res.send('yes');
-})
+// turns the submitted json object into an Artwork object + submits to db
+app.post('/submit', upload.array(), async function (req, res, next) {
+    console.log(req.body);  // for debugging purposes: include the full request
 
-/*
-{ id: 'id',
-  subject: 'subj',
-  date: '1000',
-  medium: 'dog',
-  dimensions: '1x1',
-  location: 'dogland',
-  owner: 'me',
-  source: '',
-  value: '1',
-  restrictions: 'none',
-  conditon: '',
-  notes: 'dogs made it',
-  surveyor: 'jonathan rolfe',
-  dateSurveyed: '10/08/2018' }
- */
-
+    if (isNaN(req.body.date)) {  // if date isn't a num
+        return res.status(400).send('NaN date')
+    } else if (isNaN (req.body.value)) {  // if value isn't a num
+        return res.status(400).send('NaN value')
+    } else {  // aka: if things seem fine
+        const submittedWork = new Artwork(req.body.subject, req.body.surveyor, false, false,
+            req.body.medium, false, false, false, false, req.body.date, false, false,
+            req.body.dimensions, req.body.owner, req.body.source, req.body.value,
+            req.body.restrictions, req.body.condition, req.body.notes, req.body.id);
+        try {
+            await add_art_to_db(submittedWork);
+        } catch (err) {
+            return res.status(500).send('db error');
+        }
+    }
+    return res.status(200).send('ok');
+});
 
 app.post('/upload', (req, res, next) => {
     let imageFile = req.files.file;
@@ -224,11 +216,11 @@ app.post('/upload', (req, res, next) => {
         res.send("yes");
     });
 });
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
 });
-
 
 // error handler
 app.use(function (err, req, res, next) {
