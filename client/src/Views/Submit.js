@@ -12,7 +12,6 @@ const form = {
     paddingBottom: "8%"
 };
 
-
 const divs = {
     borderRadius: "5px",
     backgroundColor: "#f2f2f2",
@@ -62,8 +61,6 @@ class Submit extends Component {
             notes: this.state.notes,
             surveyor: this.state.surveyor,
             dateSurveyed: this.state.dateSurveyed
-
-
         });
         const data = new FormData();
         data.append('file', this.uploadInput.files[0]);
@@ -119,8 +116,7 @@ class Submit extends Component {
     }
 
     render() {
-
-        var status = <div></div>;
+        let status = <div></div>;
         if (this.state.message) {
             status = (<div style={{"padding": "5%"}}>
                 <Alert bsStyle="success" style={{"width": "50%", "display": "inline-block", "margin": "auto"}}>
@@ -128,11 +124,8 @@ class Submit extends Component {
                 </Alert></div>);
         }
 
-
         return (
             <div>
-
-
                 <div style={divs}>
                     <h1> Submit A Work of Public Art </h1>
                     {status}
@@ -148,7 +141,6 @@ class Submit extends Component {
                         <label>Date of Creation</label>
                         <input onChange={this.handleChange} value={this.state.date} type="text" id="date" name="date"
                                placeholder="Enter Year..."/>
-
 
                         <label>Medium</label>
                         <input onChange={this.handleChange} value={this.state.medium} type="text" id="medium"
@@ -174,23 +166,19 @@ class Submit extends Component {
                         <label>Source</label>
                         <select id="source" name="source"
                                 value={this.state.source}
-                                onChange={this.handleSelector}
-                        >
+                                onChange={this.handleSelector}>
                             <option value="gift">Gift</option>
                             <option value="purchase">Purchase</option>
 
                         </select>
 
-
                         <label>Value</label>
                         <input onChange={this.handleChange} value={this.state.value} type="text" id="value" name="value"
                                placeholder="Enter Value..."/>
 
-
                         <label>Restrictions</label>
                         <input onChange={this.handleChange} value={this.state.restrictions} type="text"
                                id="restrictions" name="restrictions" placeholder="Enter Restrictions..."/>
-
 
                         <label>Condition</label>
                         <select id="condition" name="condition"
@@ -201,8 +189,6 @@ class Submit extends Component {
                             <option value="needed">Treatement Needed</option>
                             <option value="maintenance">Maintenance Needed</option>
                             <option value="none">No Treatement Needed</option>
-
-
                         </select>
 
                         <label>Notes</label>
