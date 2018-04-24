@@ -1,10 +1,10 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var multer = require('multer');
-var upload = multer();
+let createError = require('http-errors');
+let express = require('express');
+let path = require('path');
+let cookieParser = require('cookie-parser');
+let logger = require('morgan');
+let multer = require('multer');
+let upload = multer();
 const fileUpload = require('express-fileupload');
 const pg = require('pg');
 
@@ -53,7 +53,7 @@ async function init_tables() {
         await pool.query(
             `CREATE TABLE IF NOT EXISTS public.art_details (
             primary_key serial PRIMARY KEY,
-            name text NULL,
+            subject text NULL,
             time_added timestamp NULL,
             surveyor text NULL,
             latitude numeric NULL,
@@ -97,31 +97,31 @@ async function rebuild() {  // destroys and rebuilds the DB. DANGER!
 }
 
 async function add_art_to_db(artObject) {
-    const text = `INSERT INTO public.art_details (name, time_added, surveyor, latitude,
+    const text = `INSERT INTO public.art_details (subject, time_added, surveyor, latitude,
             longitude, medium, art_type, colors, creation_year, img_links,
             artist, dimensions, is_indoors, is_movable, owner, src, value,
             restrictions, work_condition, yuag_id, note)
             VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
             $14, $15, $16, $17, $18, $19, $20)`;
-    const values = [artObject.name, artObject.surveyor, artObject.lat, artObject.long, artObject.medium,
-        artObject.artType, artObject.workColors, artObject.creationYear,
+    const values = [artObject.subject, artObject.surveyor, artObject.lat, artObject.long, 
+        artObject.medium, artObject.artType, artObject.workColors, artObject.creationYear,
         artObject.imageLinks, artObject.artist, artObject.dimns, artObject.isIndoors,
         artObject.isMovable, artObject.owner, artObject.source, artObject.value,
         artObject.restrictions, artObject.condition, artObject.yuagID, artObject.note];
 
     try {
         await pool.query(text, values);
-        console.log('work added: ' + artObject.name)
+        console.log('work added: ' + artObject.subject)
     } catch (err) {
         console.log('err in art insertion: ' + err.stack)
     }
 }
 
 // make a prototypical art function
-function Artwork(name, surveyor, lat, long, medium, artType, workColors, isIndoors,
+function Artwork(subject, surveyor, lat, long, medium, artType, workColors, isIndoors,
                  isMovable, creationYear, imageLinks, artist, dimns, owner, source,
                  value, restrictions, condition, note, yuagID) {
-    this.name = name || 'Untitled';  // name of the work, if existent
+    this.subject = subject || 'Untitled';  // subject or name of the work, if existent
     this.surveyor = surveyor || 'Unknown'; // name of whomever surveyed the piece
     this.lat = lat || 0.0000000;  // latitude coord of the work
     this.long = long || 0.0000000;  // longitude coordinate of the work
@@ -159,10 +159,10 @@ test();
 // end database logic
 
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+let indexRouter = require('./routes/index');
+let usersRouter = require('./routes/users');
 
-var app = express();
+let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -191,20 +191,36 @@ app.get('*', (req, res) => {
 });
 
 app.post('/submit', upload.array(), function (req, res, next) {
+    console.log('incoming submission: ' + req.body.id);
     console.log(req.body);
-
     res.send('yes');
 })
 
-app.post('/upload', (req, res, next) => {
+/*
+{ id: 'id',
+  subject: 'subj',
+  date: '1000',
+  medium: 'dog',
+  dimensions: '1x1',
+  location: 'dogland',
+  owner: 'me',
+  source: '',
+  value: '1',
+  restrictions: 'none',
+  conditon: '',
+  notes: 'dogs made it',
+  surveyor: 'jonathan rolfe',
+  dateSurveyed: '10/08/2018' }
+ */
 
+
+app.post('/upload', (req, res, next) => {
     let imageFile = req.files.file;
 
     imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function (err) {
         if (err) {
             return res.status(500).send(err);
         }
-
         res.send("yes");
     });
 });
