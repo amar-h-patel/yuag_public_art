@@ -7,7 +7,7 @@ class Browse extends Component{
 	constructor(props) {
 		super();
 		this.state = {
-			ready: true,
+			ready: false,
 			art: ''
 		};
 	}
@@ -21,20 +21,42 @@ class Browse extends Component{
 
 	render(){
 
-		let ready = this.state.ready;
-		if (ready === false){
-       return (
+		// let ready = this.state.ready;
+		// if (ready === false){
+    //    return (
+		//
+		// 		 <div style={{"padding": "2em"}}>
+		// 			 <Panel>
+		// 				 <p>Browse submitted items here</p>
+		// 			 </Panel>
+		// 		 </div>
+    //       );
+		//
+    // }
+		// var info = this.state.art;
+		// const art = Object.keys(info).map((key) =>
+		//
+		//
+    //                     (
+    //                       <Panel style={{padding: '5%'}}>
+		//
+		//
+    //                           <img style={{maxHeight: "30%", maxWidth: '35%', display: 'block', padding: '3%', float: "left"}} src={info[key]['images']['0']['url']} alt="thumbnail" />
+		// 													</div>
+ 		// 											 <div style={{display: "inline-block", width: '40%'}}>
+ 		// 													 		<h2> info[key]["title"]</h2>
+ 		// 															<h3>  info[key]["artist"], info[key]["year"]</h3>
+ 		// 															<h4>  info[key]["location"]</h4>
+ 		// 															<h6>  info[key]["medium"]</h6>
+ 		// 														<p style={{textAlign: "left"}}> info[key]["notes"]</p>
+ 		// 												 </div>
+		//
+		//
+ 		// 								</Panel>
+		// 
+    //                      ));
 
-				 <div style={{"padding": "2em"}}>
-					 <Panel>
-						 <p>Browse submitted items here</p>
-					 </Panel>
-				 </div>
-          );
 
-    }
-
-		//const art = (<div></div>);
 
 		return (
 			<div style={{"padding": "2em"}}>
