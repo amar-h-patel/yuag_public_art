@@ -23,7 +23,6 @@ class Submit extends Component {
     constructor(props) {
         super();
         this.state = {
-            type: "tt",
             message: "",
             id: '',
             subject: '',
