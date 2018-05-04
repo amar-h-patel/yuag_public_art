@@ -8,16 +8,23 @@ Ensure client is built
 
 
 Deploy with
-    
+
 
     PASS=databasepassword npm start
 
 where databasepassword is the db password
 
+## Hosting
+
+Available on Heroku with full functionality at
+
+    https://yuag-public-art.herokuapp.com/
+
+
 
 ## Description
   A semi-open, crowdsourced archive of public art on Yale's campus.  
-  Users with access can seek out and submit new entries into the database with relevant information and a photograph. 
+  Users with access can seek out and submit new entries into the database with relevant information and a photograph.
 
 
 ## Contributors and (rough) division of labor
