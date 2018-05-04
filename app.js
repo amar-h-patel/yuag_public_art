@@ -23,8 +23,8 @@ const pool = new pg.Pool({
 async function db_test() {
     try {
         const response = await pool.query(`
-            SELECT COLUMN_NAME 
-            FROM information_schema.COLUMNS 
+            SELECT COLUMN_NAME
+            FROM information_schema.COLUMNS
             WHERE TABLE_NAME = 'user_db'
         `);
         console.log(JSON.stringify(response.rows));
@@ -171,13 +171,7 @@ app.use(cookieParser());
 app.use(fileUpload());
 app.use('/public', express.static(__dirname + '/public'));
 
-app.get('/users', function (req, res, next) {
-    let data = {
-        message: "Hello World!"
-    };
-    res.status(200).send(data);
-});
-
+//express serves static files from react build
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('*', (req, res) => {
@@ -206,6 +200,7 @@ app.post('/submit', upload.array(), async function (req, res, next) {
     return res.status(200).send('ok');
 });
 
+//takes uploaded image file and saves locally to public directory
 app.post('/upload', (req, res, next) => {
     let imageFile = req.files.file;
 

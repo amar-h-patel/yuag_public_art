@@ -39,6 +39,7 @@ class Submit extends Component {
             surveyor: '',
             dateSurveyed: ''
         };
+        //bind functions to this
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSelector = this.handleSelector.bind(this);
@@ -61,6 +62,7 @@ class Submit extends Component {
             surveyor: this.state.surveyor,
             dateSurveyed: this.state.dateSurveyed
         });
+        //post image file
         const data = new FormData();
         data.append('file', this.uploadInput.files[0]);
         data.append('filename', this.state.id);
@@ -68,8 +70,9 @@ class Submit extends Component {
             method: 'POST',
             body: data,
         });
+        //stop standard html form post
         e.preventDefault();
-
+        //send json of the art submission
         let response = await fetch('/submit', {
             method: 'POST',
             headers: {
@@ -78,6 +81,7 @@ class Submit extends Component {
             },
             body: submission,
         });
+        //on response, change state message and scroll to top
         if (response.status === 200) {
             this.setState({message: "Successfully Submitted!"});
             this.setState({
@@ -106,7 +110,7 @@ class Submit extends Component {
         window.scrollTo(0, 0);
 
     }
-
+    //Update state with each element of the form as controlled element
     handleChange(event) {
         const target = event.target;
         const name = target.name;

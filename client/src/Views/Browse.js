@@ -12,6 +12,8 @@ class Browse extends Component{
 		};
 	}
 	ComponentDidMount(){
+		//Will fetch the data from the db as a json and store JSON to this.state
+
 		// fetch('/browse').then(resp => resp.json()).then(resp => {
 		// this.setState({art: resp})
 	// })
@@ -20,7 +22,7 @@ class Browse extends Component{
 
 
 	render(){
-
+		//Once db integration set up, will conditionally render content once fetched
 		// let ready = this.state.ready;
 		// if (ready === false){
     //    return (
@@ -53,11 +55,11 @@ class Browse extends Component{
 		//
 		//
  		// 								</Panel>
-		// 
+		//
     //                      ));
 
 
-
+//Currently returns static elements
 		return (
 			<div style={{"padding": "2em"}}>
 						<Panel style={{padding: '5%'}}>

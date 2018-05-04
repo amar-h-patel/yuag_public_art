@@ -4,7 +4,7 @@ import Jumbo from "./Jumbo.js";
 import '../../node_modules/bootstrap3/dist/css/bootstrap.css';
 
 class Viewer extends Component{
-
+//Standard Bootstrap Carousel Element
 	render(){
 		return(
 		<div>
