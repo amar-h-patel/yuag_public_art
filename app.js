@@ -33,6 +33,8 @@ async function db_test() {
     }
 }
 
+
+
 // ONLY FOR DEBUGGING (of course) - deletes the art detail table.
 async function delete_art_table() {
     try {
@@ -42,6 +44,8 @@ async function delete_art_table() {
         console.log('err in drop table ' + err)
     }
 }
+
+init_tables();
 
 async function init_tables() {
     // creates the tables if it doesn't already exist.
@@ -54,8 +58,7 @@ async function init_tables() {
             subject text NULL,
             time_added timestamp NULL,
             surveyor text NULL,
-            latitude numeric NULL,
-            longitude numeric NULL,
+            location text NULL,
             medium text NULL,
             art_type text NULL,
             colors text NULL,
@@ -95,13 +98,13 @@ async function rebuild() {  // destroys and rebuilds the DB. DANGER!
 }
 
 async function add_art_to_db(artObject) {
-    const text = `INSERT INTO public.art_details (subject, time_added, surveyor, latitude,
-            longitude, medium, art_type, colors, creation_year, img_links,
+    const text = `INSERT INTO public.art_details (subject, time_added, surveyor, location,
+             medium, art_type, colors, creation_year, img_links,
             artist, dimensions, is_indoors, is_movable, owner, src, value,
             restrictions, work_condition, yuag_id, note)
             VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
-            $14, $15, $16, $17, $18, $19, $20)`;
-    const values = [artObject.subject, artObject.surveyor, artObject.lat, artObject.long,
+            $14, $15, $16, $17, $18, $19)`;
+    const values = [artObject.subject, artObject.surveyor, artObject.loc,
         artObject.medium, artObject.artType, artObject.workColors, artObject.creationYear,
         artObject.imageLinks, artObject.artist, artObject.dimns, artObject.isIndoors,
         artObject.isMovable, artObject.owner, artObject.source, artObject.value,
@@ -116,13 +119,12 @@ async function add_art_to_db(artObject) {
 }
 
 // make a prototypical art function
-function Artwork(subject, surveyor, lat, long, medium, artType, workColors, isIndoors,
+function Artwork(subject, surveyor, loc, medium, artType, workColors, isIndoors,
                  isMovable, creationYear, imageLinks, artist, dimns, owner, source,
                  value, restrictions, condition, note, yuagID) {
     this.subject = subject || 'Untitled';  // subject or name of the work, if existent
     this.surveyor = surveyor || 'Unknown'; // name of whomever surveyed the piece
-    this.lat = lat || 0.0000000;  // latitude coord of the work
-    this.long = long || 0.0000000;  // longitude coordinate of the work
+    this.loc = loc || 'Unknown';  // location coord of the work
     this.medium = medium || 'Unknown';  // medium (e.g., glass)
     this.artType = artType || 'Unknown';  // broad type of art (e.g., sculpture)
     this.workColors = workColors || 'Unknown';  // colors involved in the work
@@ -151,7 +153,19 @@ async function test() {  // a function to test basic db functionality
     await add_art_to_db(testWork);
 }
 
-test();
+
+async function clear() {
+  await pool.query('DELETE FROM ONLY public.art_details');
+}
+async function pull() {
+  try {
+    const response = await pool.query('SELECT * FROM public.art_details');
+    return response.rows;
+  } catch (err) {
+    console.log('error: ' + err);
+  }
+}
+
 
 // end database logic
 
@@ -164,6 +178,7 @@ let app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -173,6 +188,21 @@ app.use('/public', express.static(__dirname + '/public'));
 
 //express serves static files from react build
 app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.get('/pull', async function (req, res, next) {
+  console.log("call to /pull");
+    const response = await pull();
+    console.log(response);
+    res.status(200).send(response);
+
+});
+
+app.post('/file', (req, res, next) => {
+    console.log("req " + req.body.id);
+    let paths = req.body.id + ".jpg";
+    res.download(path.join(__dirname, './public', paths));
+});
+
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/client/build/index.html'));
@@ -187,8 +217,8 @@ app.post('/submit', upload.array(), async function (req, res, next) {
     } else if (isNaN (req.body.value)) {  // if value isn't a num
         return res.status(400).send('NaN value')
     } else {  // aka: if things seem fine
-        const submittedWork = new Artwork(req.body.subject, req.body.surveyor, false, false,
-            req.body.medium, false, false, false, false, req.body.date, false, false,
+        const submittedWork = new Artwork(req.body.subject, req.body.surveyor, req.body.location,
+            req.body.medium, false, false, false, false, req.body.date, false, req.body.artist,
             req.body.dimensions, req.body.owner, req.body.source, req.body.value,
             req.body.restrictions, req.body.condition, req.body.notes, req.body.id);
         try {
@@ -211,6 +241,7 @@ app.post('/upload', (req, res, next) => {
         res.send("yes");
     });
 });
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

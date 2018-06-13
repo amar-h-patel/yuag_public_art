@@ -26,6 +26,7 @@ class Submit extends Component {
             message: "",
             id: '',
             subject: '',
+            artist: '',
             date: '',
             medium: '',
             dimensions: '',
@@ -49,6 +50,7 @@ class Submit extends Component {
         let submission = JSON.stringify({
             id: this.state.id,
             subject: this.state.subject,
+            artist: this.state.artist,
             date: this.state.date,
             medium: this.state.medium,
             dimensions: this.state.dimensions,
@@ -87,6 +89,7 @@ class Submit extends Component {
             this.setState({
                 id: '',
                 subject: '',
+                artist: '',
                 date: '',
                 medium: '',
                 dimensions: '',
@@ -147,6 +150,10 @@ class Submit extends Component {
                         <label>Subject/Title</label>
                         <input onChange={this.handleChange} value={this.state.subject} type="text" id="subject"
                                name="subject" placeholder="Enter Subject/Title..."/>
+
+                       <label>Artist</label>
+                       <input onChange={this.handleChange} value={this.state.artist} type="text" id="artist"
+                              name="artist" placeholder="Enter Artist/Creator..."/>
 
                         <label>Date of Creation</label>
                         <input onChange={this.handleChange} value={this.state.date} type="text" id="date" name="date"

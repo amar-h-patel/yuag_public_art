@@ -14,15 +14,15 @@ class App extends Component {
       <Router>
       <div className="App">
         <header>
-          
-          <div> <Headnav/> </div>
+
+          <Headnav/>
 
         </header>
          <Route path="/browse" component={Browse}/>
          <Route path="/submit" component={Submit}/>
          <Route path="/about" component={About}/>
          <Route exact path="/" component={Viewer}/>
-       
+
       </div>
       </Router>
     );

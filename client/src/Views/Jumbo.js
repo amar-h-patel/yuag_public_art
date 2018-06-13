@@ -2,30 +2,32 @@ import React, { Component } from 'react';
 import {Button} from "react-bootstrap";
 import {Jumbotron} from "react-bootstrap";
 import '../../node_modules/bootstrap3/dist/css/bootstrap.css';
-import './Jumbo.css';
+
+
+
 const title = {
-  color: "#dce3e8",
+  color: "rgb(233, 234, 239)",
   textShadow: "3px 3px #373636"
 };
 
 class Jumbo extends Component {
   render() {
-    var h1style = {
-      color: 'white',
-    }
+
     return (
       <div className="Jumbo">
-        <Jumbotron styles={h1style}>
+        <Jumbotron style={{backgroundImage: "url('https://yalealumnimagazine.com/uploads/images/5400054/1414592597/vanderbilt.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',}}>
             <h1 style={title}>Public Art at Yale</h1>
             <br/>
 
             <br/>
             <br/>
 
-            <Button bsStyle="primary" href="/about" >Learn more</Button>
+            <Button style={{textShadow: "0px 0px #373636"}} bsStyle="primary" href="/about" >Learn more</Button>
             <br/>
             <br/>
-            <Button bsStyle="primary" href="/submit" >Submit a Piece</Button>
+            <Button style={{textShadow: "0px 0px #373636"}} bsStyle="primary" href="/submit" >Submit a Piece</Button>
             {/*link these!*/}
 
         </Jumbotron>
