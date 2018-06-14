@@ -2,8 +2,17 @@ let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
+let request = require('request');
 let logger = require('morgan');
 let multer = require('multer');
+let fs = require('fs');
+const Storage = require('@google-cloud/storage');
+const projectId = 'yuag-public-art';
+const storage = new Storage({
+  projectId: projectId,
+  keyFilename: './yuag-public-art-9e535193ec10.json'
+});
+const bucket = storage.bucket('yuag-public-art');
 let upload = multer();
 const fileUpload = require('express-fileupload');
 const pg = require('pg');
@@ -157,6 +166,7 @@ async function test() {  // a function to test basic db functionality
 async function clear() {
   await pool.query('DELETE FROM ONLY public.art_details');
 }
+
 async function pull() {
   try {
     const response = await pool.query('SELECT * FROM public.art_details');
@@ -199,6 +209,10 @@ app.get('/pull', async function (req, res, next) {
 
 app.post('/file', (req, res, next) => {
     console.log("req " + req.body.id);
+    storage
+      .bucket('yuag-public-art')
+      .file(req.body.id + ".jpg")
+      .download(req.body.id + ".jpg");
     let paths = req.body.id + ".jpg";
     res.download(path.join(__dirname, './public', paths));
 });
@@ -213,9 +227,11 @@ app.post('/submit', upload.array(), async function (req, res, next) {
     console.log(req.body);  // for debugging purposes: include the full request
 
     if (isNaN(req.body.date)) {  // if date isn't a num
-        return res.status(400).send('NaN date')
+        return res.status(400).send('Date must be a Number')
     } else if (isNaN (req.body.value)) {  // if value isn't a num
-        return res.status(400).send('NaN value')
+        return res.status(400).send('Value must be a number')
+    } else if(!req.body.id){
+        return res.status(400).send('ID must not be blank')
     } else {  // aka: if things seem fine
         const submittedWork = new Artwork(req.body.subject, req.body.surveyor, req.body.location,
             req.body.medium, false, false, false, false, req.body.date, false, req.body.artist,
@@ -230,16 +246,24 @@ app.post('/submit', upload.array(), async function (req, res, next) {
     return res.status(200).send('ok');
 });
 
-//takes uploaded image file and saves locally to public directory
-app.post('/upload', (req, res, next) => {
-    let imageFile = req.files.file;
 
+
+//takes uploaded image file and saves locally to public directory
+app.post('/upload', async (req, res, next) => {
+    let imageFile = req.files.file;
     imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function (err) {
         if (err) {
             return res.status(500).send(err);
         }
+      });
+    storage
+      .bucket('yuag-public-art')
+      .upload(`${__dirname}/public/${req.body.filename}.jpg`, 'yuag')
+      .then(() => {
+        console.log('file uploaded');
+      });
         res.send("yes");
-    });
+
 });
 
 

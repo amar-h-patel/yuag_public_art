@@ -131,7 +131,7 @@ onNext(){
 		const art =
 		(
 			<Panel style={{justifyContent: 'space-around', alignItems: 'center',display: 'flex', flexWrap: 'nowrap', flexDirection: 'row', padding: '5%'}}>
-					<img style={{maxHeight: "30%", maxWidth: '55%', display: 'block', padding: '3%', float: "left", position: 'relative', overflow: 'auto', flexShrink: '0'}}  alt="no render" src={im[key]} />
+					<img style={{minWidth: "40%", maxWidth: '55%', display: 'block', padding: '3%', float: "left", position: 'relative', overflow: 'auto', flexShrink: '0'}}  alt="no render" src={im[key]} />
 				<div style={{display: "flex", width: '40%', flexDirection: 'column',alignSelf: 'stretch'}}>
 					<div>
 						<h2> {info[key]["subject"]}</h2>
