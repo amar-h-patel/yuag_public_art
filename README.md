@@ -14,6 +14,9 @@ Deploy with
 
 where databasepassword is the db password
 
+For image storage hosted by Google Cloud Platform:
+Ensure --key--.json file is in root directory. 
+
 ## Hosting
 
 Available on Heroku with full functionality at
