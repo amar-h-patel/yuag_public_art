@@ -206,12 +206,12 @@ app.get('/pull', async function (req, res, next) {
 
 });
 
-app.post('/file', (req, res, next) => {
+app.post('/file', async (req, res, next) => {
     console.log("req " + req.body.id);
-    storage
+    const down = await storage
       .bucket('yuag-public-art')
       .file(req.body.id + ".jpg")
-      .download(req.body.id + ".jpg");
+      .download({destination:"./public/" + req.body.id + ".jpg"});
     let paths = req.body.id + ".jpg";
     res.download(path.join(__dirname, './public', paths));
 });
