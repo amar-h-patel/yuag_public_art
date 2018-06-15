@@ -137,7 +137,7 @@ onNext(){
 						<h2> {info[key]["subject"]}</h2>
 						<h3> {info[key]["artist"]}, {info[key]["creation_year"]}</h3>
 						<h4>{info[key]["location"]}</h4>
-						<h6> {info[key]["Medium"]}</h6>
+						<h6> {info[key]["medium"]}</h6>
 					</div>
 					<p style={{textAlign: "left"}}>&#9;{info[key]["note"]} </p>
 				</div>
