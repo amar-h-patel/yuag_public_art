@@ -106,7 +106,7 @@ class Submit extends Component {
         } else if (response.status === 400) {
             this.setState({message: "Invalid submission :("});
         } else if (response.status === 500) {
-            this.setState({message: "Server error - try again in a minute"})
+            this.setState({message: "Server error - Is your ID number unique?"})
         } else {
             this.setState({message: "Unknown error."})
         }

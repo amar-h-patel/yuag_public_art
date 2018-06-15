@@ -32,9 +32,9 @@ const pool = new pg.Pool({
 async function db_test() {
     try {
         const response = await pool.query(`
-            SELECT COLUMN_NAME
+            SELECT COLUMN_NAME, data_type
             FROM information_schema.COLUMNS
-            WHERE TABLE_NAME = 'user_db'
+            WHERE TABLE_NAME = 'art_details'
         `);
         console.log(JSON.stringify(response.rows));
     } catch (err) {
@@ -232,12 +232,26 @@ app.post('/submit', upload.array(), async function (req, res, next) {
     } else if(!req.body.id){
         return res.status(400).send('ID must not be blank')
     } else {  // aka: if things seem fine
-        const submittedWork = new Artwork(req.body.subject, req.body.surveyor, req.body.location,
+        const artObject = new Artwork(req.body.subject, req.body.surveyor, req.body.location,
             req.body.medium, false, false, false, false, req.body.date, false, req.body.artist,
             req.body.dimensions, req.body.owner, req.body.source, req.body.value,
             req.body.restrictions, req.body.condition, req.body.notes, req.body.id);
         try {
-            await add_art_to_db(submittedWork);
+          const text = `INSERT INTO public.art_details (subject, time_added, surveyor, location,
+                   medium, art_type, colors, creation_year, img_links,
+                  artist, dimensions, is_indoors, is_movable, owner, src, value,
+                  restrictions, work_condition, yuag_id, note)
+                  VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,
+                  $14, $15, $16, $17, $18, $19)`;
+          const values = [artObject.subject, artObject.surveyor, artObject.loc,
+              artObject.medium, artObject.artType, artObject.workColors, artObject.creationYear,
+              artObject.imageLinks, artObject.artist, artObject.dimns, artObject.isIndoors,
+              artObject.isMovable, artObject.owner, artObject.source, artObject.value,
+              artObject.restrictions, artObject.condition, artObject.yuagID, artObject.note];
+
+              await pool.query(text, values);
+
+              console.log('work added: ' + artObject.subject)
         } catch (err) {
             return res.status(500).send('db error');
         }
@@ -249,7 +263,11 @@ app.post('/submit', upload.array(), async function (req, res, next) {
 
 //takes uploaded image file and saves locally to public directory
 app.post('/upload', async (req, res, next) => {
+  if(!req.files){
+    return res.status(404).send("No Image File!");
+  }
     let imageFile = req.files.file;
+
     imageFile.mv(`${__dirname}/public/${req.body.filename}.jpg`, function (err) {
         if (err) {
             return res.status(500).send(err);
