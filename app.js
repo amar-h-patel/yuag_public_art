@@ -176,7 +176,6 @@ async function pull() {
   }
 }
 
-
 // end database logic
 
 let indexRouter = require('./routes/index');
