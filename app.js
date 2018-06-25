@@ -20,10 +20,10 @@ const pg = require('pg');
 
 // begin database logic
 const pool = new pg.Pool({
-    user: 'postgres',
-    host: process.env.HOST || 'ec2-52-55-107-25.compute-1.amazonaws.com',
-    database: 'publicart',
-    password: process.env.PASS || '',
+    user: process.env.USER || '***REMOVED***',
+    host: process.env.HOST || '***REMOVED***',
+    database: '***REMOVED***',
+    password: process.env.PASS || '***REMOVED***',
     port: 5432,
     max: 10  // max number of clients in the connection pool
 });
