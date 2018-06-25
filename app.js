@@ -20,12 +20,13 @@ const pg = require('pg');
 
 // begin database logic
 const pool = new pg.Pool({
-    user: process.env.USER || '***REMOVED***',
-    host: process.env.HOST || '***REMOVED***',
+    user: '***REMOVED***',
+    host: '***REMOVED***',
     database: '***REMOVED***',
     password: process.env.PASS || '***REMOVED***',
     port: 5432,
-    max: 10  // max number of clients in the connection pool
+    max: 10,
+    ssl: true  // max number of clients in the connection pool
 });
 
 // test fn - describe the art_details table
@@ -41,8 +42,6 @@ async function db_test() {
         console.log('error: ' + err)
     }
 }
-
-
 
 // ONLY FOR DEBUGGING (of course) - deletes the art detail table.
 async function delete_art_table() {
