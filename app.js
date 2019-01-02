@@ -10,7 +10,7 @@ const Storage = require('@google-cloud/storage');
 const projectId = 'yuag-public-art';
 const storage = new Storage({
   projectId: projectId,
-  keyFilename: './yuag-public-art-9e535193ec10.json'
+  keyFilename: 'XXXXX'
 });
 const bucket = storage.bucket('yuag-public-art');
 let upload = multer();
@@ -20,10 +20,10 @@ const pg = require('pg');
 
 // begin database logic
 const pool = new pg.Pool({
-    user: '***REMOVED***',
-    host: '***REMOVED***',
-    database: '***REMOVED***',
-    password: process.env.PASS || '***REMOVED***',
+    user: 'XXXXX',
+    host: 'XXXXX',
+    database: 'XXXXX',
+    password: process.env.PASS || 'XXXXX',
     port: 5432,
     max: 10,
     ssl: true  // max number of clients in the connection pool
